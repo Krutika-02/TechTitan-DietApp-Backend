@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+    
+      {
+        "name": "Python Debugger: FastAPI",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "${file}",
+        "console": "integratedTerminal",
+        "args": [
+          "uvicorn",
+          "main:app",
+          "--reload",
+          "--port",
+          "8001"
+        ]
+      }
+    ]
+  }
+  
