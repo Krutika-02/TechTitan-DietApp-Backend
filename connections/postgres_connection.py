@@ -40,3 +40,12 @@ class DBResourceManager():
         if self.engine:
             self.engine.dispose()
             print("Database connection closed")
+
+    def get_db(self):
+        """FastAPI dependency for getting the session"""
+        db = self.connect()
+        try:
+            yield db  # Yield the session for FastAPI
+        finally:
+            if db:
+                db.close()  # Close the session after use
