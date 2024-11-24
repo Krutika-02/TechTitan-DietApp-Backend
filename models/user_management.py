@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, JSON, ForeignKey, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
 from enum import Enum
 from sqlalchemy.dialects.postgresql import UUID
@@ -14,12 +14,23 @@ class User(Base):
     email = Column(String, unique=True, nullable=False, index=True)
     phone_number = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
-    # gender = Column(Enum("Male", "Female", "Other"), nullable=False)
-    # role = Column(Enum("Dietitian", "Client"), nullable=False)  # "Dietitian" or "Client"
     user_external_reference_id = Column(UUID(as_uuid=True), unique=True, nullable=False)
     gender = Column(String, nullable=False)
-    role = Column(String, nullable=False)  # "dietitian" or "client"
+    goal = Column(String, nullable=True)  
+    height = Column(Float, nullable=True)  
+    weight = Column(Float, nullable=True)  
+    date_of_birth = Column(Date, nullable=True)
     is_active = Column(Boolean, default=True)
+
+class DietPlan(Base):
+    __tablename__ = "diet_plans"
+
+    id = Column(Integer, primary_key=True, index=True)
+    client_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    title = Column(String, nullable=False)
+    meals = Column(JSON, nullable=False)  # JSON field to store meal details
+    nutrient_goals = Column(JSON, nullable=False)  # JSON field for nutrient goals
+    restrictions = Column(JSON, nullable=True)  # JSON field for dietary restrictions
 
 # from datetime import datetime, timezone
 # from sqlalchemy import (

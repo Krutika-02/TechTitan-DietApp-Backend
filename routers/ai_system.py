@@ -5,7 +5,6 @@ from services.ai_system.ai_system import generate_diet_plan, generate_recipes
 
 app = FastAPI()
 
-# Router for the API endpoints
 router = APIRouter()
 
 # Registering the diet plan endpoint

@@ -1,7 +1,7 @@
+import uuid
 from sqlalchemy.orm import Session
 from models.user_management import User
 from custom_utilities.auth import hash_password
-import uuid
 
 def register_user(db: Session, user_data: dict):
     hashed_password = hash_password(user_data["password"])
@@ -12,7 +12,10 @@ def register_user(db: Session, user_data: dict):
         phone_number=user_data["phone_number"],
         hashed_password=hashed_password,
         gender=user_data["gender"],
-        role=user_data["role"],
+        goal=user_data.get("goal", None), 
+        height=user_data.get("height", None),  
+        weight=user_data.get("weight", None),  
+        date_of_birth=user_data.get("date_of_birth", None),
         user_external_reference_id=str(uuid.uuid4())
     )
     db.add(new_user)

@@ -1,4 +1,3 @@
-from typing import List, Dict
 import openai
 import os
 from dotenv import load_dotenv
@@ -33,7 +32,7 @@ def generate_diet_plan(data: RequestDTO) -> ResponseDTO:
 
         # Generate response from OpenAI
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # Use "gpt-4" for higher quality if available
+            model="gpt-3.5-turbo",  
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
@@ -76,44 +75,24 @@ def generate_recipes(request: IngredientOptimizationRequestDTO) -> IngredientOpt
             temperature=0.7,
             max_tokens=1500
         )
-
-        # Parse the response
         recipes_text = response['choices'][0]['message']['content']
-        
-        # Parse the recipes text into structured format
         try:
-            # Split the recipes_text into lines (adjust this logic based on actual response format)
             lines = recipes_text.split("\n")
-            
-            # Ensure we have enough lines in the response before accessing them
             if len(lines) < 4:
                 raise ValueError("Invalid recipe format: expected at least four lines of content.")
-            
-            # Parse the first line for the recipe name
             name = lines[0].strip()
-            
-            # Parse the second line for ingredients (separate by commas)
-            ingredients = lines[1].split(", ")  # Assuming ingredients are listed in the second line
-            
-            # Join the remaining lines as instructions
-            instructions = "\n".join(lines[2:])  # Join the list into a single string
-            
-            # Handle nutritional information more flexibly
+            ingredients = lines[1].split(", ")  
+            instructions = "\n".join(lines[2:])  
             nutrition_info = {}
-            nutrition_info_str = lines[-1].strip()  # Get the last line as nutritional info
-            
+            nutrition_info_str = lines[-1].strip()  
             if nutrition_info_str:
-                # Split the nutrition information by commas and parse each item
                 nutrition_lines = nutrition_info_str.split(", ")
                 for item in nutrition_lines:
                     if ": " in item:
                         key, value = item.split(": ")
                         nutrition_info[key.lower()] = value
                     else:
-                        # Handle case where the expected format is not found
                         print(f"Skipping invalid nutritional item: {item}")
-
-            # Return the structured recipe (with required fields)
             structured_recipes = [{
                 "name": name,
                 "ingredients": ingredients,
@@ -123,8 +102,6 @@ def generate_recipes(request: IngredientOptimizationRequestDTO) -> IngredientOpt
 
         except Exception as e:
             raise ValueError(f"Error parsing recipes: {str(e)}")
-
-        # Map structured recipes into DTOs
         recipes = [
             RecipeDTO(
                 name=recipe.get('name'),

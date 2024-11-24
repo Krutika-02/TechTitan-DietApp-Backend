@@ -1,4 +1,3 @@
-# dto/response_dto/ingredient_optimization_response_dto.py
 from pydantic import BaseModel, Field
 from typing import List, Dict
 

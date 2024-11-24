@@ -1,18 +1,22 @@
-# Simulated database
-database = []
+from sqlalchemy.orm import Session
+from models.user_management import DietPlan
+from dto.request_dto.dietitian_request_dto import DietPlanCreate
 
-def find_diet_plan(diet_plan_id: str):
-    for diet_plan in database:
-        if diet_plan["diet_plan_id"] == diet_plan_id:
-            return diet_plan
-    return None
+class DietPlanRepository:
+    @staticmethod
+    def create_diet_plan(db: Session, diet_plan: DietPlanCreate) -> DietPlan:
+        new_diet_plan = DietPlan(
+            client_id=diet_plan.client_id,
+            title=diet_plan.title,
+            meals=diet_plan.meals,
+            nutrient_goals=diet_plan.nutrient_goals,
+            restrictions=diet_plan.restrictions
+        )
+        db.add(new_diet_plan)
+        db.commit()
+        db.refresh(new_diet_plan)
+        return new_diet_plan
 
-def update_diet_plan(diet_plan_id: str, modifications: dict):
-    diet_plan = find_diet_plan(diet_plan_id)
-    if not diet_plan:
-        return False
-
-    # Apply modifications
-    for key, value in modifications.items():
-        diet_plan[key] = value
-    return True
+    @staticmethod
+    def get_diet_plan_by_id(db: Session, diet_plan_id: int) -> DietPlan:
+        return db.query(DietPlan).filter(DietPlan.id == diet_plan_id).first()
