@@ -13,7 +13,7 @@ class RegisterRequest(BaseModel):
     height: float  
     weight: float
     date_of_birth: date
-    user_external_reference_id: str
+    user_external_reference_id: Optional[str] = None
 
 class LoginRequest(BaseModel):
     email: str
@@ -23,3 +23,6 @@ class UpdateUserProfileRequest(BaseModel):
     username: Optional[str]
     email: Optional[EmailStr]
     password: Optional[str]
+
+class UserRequestDTO(BaseModel):
+    user_id: int

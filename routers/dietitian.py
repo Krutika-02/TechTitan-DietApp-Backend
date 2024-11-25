@@ -8,6 +8,13 @@ from services.diet_plan_service.diet_plan_service import DietPlanService
 router = APIRouter()
 app = FastAPI()
 
+# @router.get("/{1}", response_model=DietitianDetailsResponse)
+# def get_dietitian_details(dietitian_id: int, db: Session = Depends(get_db)):
+#     dietitian_details = DietPlanService.get_dietitian_details(db, dietitian_id)
+#     if not diet_plan:
+#         raise HTTPException(status_code=404, detail="Dietitian not found")
+#     return dietitian_details
+
 @router.post("/", response_model=DietPlanResponse)
 def create_diet_plan(diet_plan: DietPlanCreate, db: Session = Depends(get_db)):
     return DietPlanService.create_diet_plan(db, diet_plan)
