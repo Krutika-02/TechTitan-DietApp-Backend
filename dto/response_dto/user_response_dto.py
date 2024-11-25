@@ -18,3 +18,6 @@ class UserResponseDTO(BaseModel):
     weight: float
     date_of_birth: date
     is_active: bool
+
+    class Config:
+        orm_mode = True  # Enables direct mapping from SQLAlchemy models

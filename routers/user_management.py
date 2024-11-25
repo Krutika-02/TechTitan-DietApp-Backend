@@ -3,6 +3,7 @@ from typing import List
 from fastapi import APIRouter, FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
 from custom_utilities.database import get_db
+from custom_utilities.auth import verify_token
 from services.user_management.user_management import register_user, UserService
 from models.user_management import User
 from dto.request_dto.user_request_models import RegisterRequest,LoginRequest, UserRequestDTO
@@ -47,15 +48,15 @@ def login(login_request: LoginRequest, db: Session = Depends(get_db)):
     }
 
 @router.get("/{user_id}", response_model=UserResponseDTO)
-def get_user_details(user_id: int, db: Session = Depends(get_db)):
+def get_user_details(user_id: int, db: Session = Depends(get_db),token_payload: dict = Depends(verify_token)):
     user_details = UserService.get_user_details(db, user_id)
     if not user_details:
         raise HTTPException(status_code=404, detail="User not found")
     return user_details
 
 @router.get("/", response_model=List[UserResponseDTO])
-def get_all_user_details(db: Session = Depends(get_db)):
+def get_all_user_details(db: Session = Depends(get_db),token_payload: dict = Depends(verify_token)):
     user_details = UserService.get_all_user_details(db)
     if not user_details:
         raise HTTPException(status_code=404, detail="No users found")
-    return [user.model_dump() for user in user_details]
+    return user_details  # Directly return the list of UserResponseDTO objects

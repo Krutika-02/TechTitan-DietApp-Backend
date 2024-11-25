@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException,Depends
+from custom_utilities.auth import verify_token
 from dto.request_dto.ai_system_request_dto import RequestDTO, IngredientOptimizationRequestDTO
 from dto.response_dto.ai_system_response_dto import ResponseDTO, IngredientOptimizationResponseDTO
 from services.ai_system.ai_system import generate_diet_plan, generate_recipes
@@ -9,7 +10,7 @@ router = APIRouter()
 
 # Registering the diet plan endpoint
 @router.post("/generate-diet-plan/", response_model=ResponseDTO)
-async def get_diet_plan(request: RequestDTO):
+async def get_diet_plan(request: RequestDTO,token_payload: dict = Depends(verify_token)):
     try:
         # Call the service to generate the diet plan
         result = generate_diet_plan(request)
@@ -19,7 +20,7 @@ async def get_diet_plan(request: RequestDTO):
 
 # Registering the ingredient optimization endpoint
 @router.post("/optimize-ingredients/", response_model=IngredientOptimizationResponseDTO)
-async def optimize_ingredients(request: IngredientOptimizationRequestDTO):
+async def optimize_ingredients(request: IngredientOptimizationRequestDTO,token_payload: dict = Depends(verify_token)):
     """
     Generate recipes based on available ingredients and user preferences.
     """
