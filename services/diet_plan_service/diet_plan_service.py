@@ -4,10 +4,6 @@ from dto.response_dto.dietitian_response_dto import DietPlanResponse
 from repository.diet_plan_repository import DietPlanRepository
 
 class DietPlanService:
-    # @staticmethod
-    # def get_dietitian_details(db: Session, dietitian_id: int) -> DietitianDetailsResponse:
-    #     return DietPlanRepository.get_dietitian_details(db, dietitian_id)
-    
     @staticmethod
     def create_diet_plan(db: Session, diet_plan: DietPlanCreate) -> DietPlanResponse:
         new_diet_plan = DietPlanRepository.create_diet_plan(db, diet_plan)

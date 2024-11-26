@@ -3,10 +3,6 @@ from models.user_management import DietPlan
 from dto.request_dto.dietitian_request_dto import DietPlanCreate
 
 class DietPlanRepository:
-    # @staticmethod
-    # def get_dietitian_details(db: Session, diet_plan_id: int):
-    #     return db.query(dietitian).filter(dietitian.id == diet_plan_id).first()
-    
     @staticmethod
     def create_diet_plan(db: Session, diet_plan: DietPlanCreate) -> DietPlan:
         new_diet_plan = DietPlan(
